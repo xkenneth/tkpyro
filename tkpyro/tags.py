@@ -1,8 +1,11 @@
 #builtin types
 import pdb
 import Tkinter
+import Pmw
 
 from helper import koi, correct_indentation, not_koi, ignorable, grid_keys
+
+from nodes import assemble
 
 class _obj:
     def __init__(self):
@@ -17,7 +20,7 @@ class _visible_obj(_obj):
 
 class Script(_obj):
     __tag__ = 'script'
-    def __call__(self,event):
+    def __call__(self,event=None):
         exec correct_indentation(self.tag.text)
 
 class Event(Script):
@@ -48,5 +51,25 @@ class Frame(_visible_obj):
     def construct(self):
         self.widget = Tkinter.Frame(self.parent.widget,not_koi(self.tag,ignorable))
 
-tags = [Canvas,Text,Button,Frame,Script,Event]
+class NoteBook(_visible_obj):
+    __tag__ = 'notebook'
     
+    def construct(self):
+        self.widget = Pmw.NoteBook(self.parent.widget)
+
+class Page(_obj):
+    __tag__ = 'page'
+    
+    def construct(self):
+        self.widget = self.parent.widget.add(self.tag.get('title'))
+
+class Replicate(_obj):
+    __tag__ = 'replicate'
+    
+    def construct(self):
+        for data in eval(self.tag.get('over')):
+            for child_node in self.tag:
+                new_node = assemble(child_node,self.parent)
+
+tag_names = [Canvas,Text,Button,Frame,Script,Event,NoteBook,Page,Replicate]
+

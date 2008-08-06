@@ -1,11 +1,18 @@
 import sys
-from tags import tags
+import pdb
+
+from helper import construct_class
 
 #assemble objects recursively
 canvas = None
-
 def assemble(tree,parent=None):
     global canvas
+    
+    new_node = None
+    print tree.tag
+
+    #if we need to stop traversing for any reason, mostly for replicate nodes
+    stop = False
 
     #if it's the first call and we have no parent
     if parent is None:
@@ -14,9 +21,15 @@ def assemble(tree,parent=None):
         canvas.tag = tree
         canvas.construct()
         parent = canvas
+        
     else:
         #else construct the class
         new_node = construct_class(tree)
+        
+        #we don't want to construct the child nodes of a replicate tag in the normal manner, so we don't traverse them
+        if new_node.tag.tag == 'replicate':
+            stop = True
+
         #set it's parent
         new_node.parent = parent
         #construct it
@@ -47,24 +60,13 @@ def assemble(tree,parent=None):
         #append it to it's parent
         parent.child_nodes.append(new_node)
         
-    for child in tree:
-        #work on all of the children
-        assemble(child,parent)
+    if not stop:
+        for child in tree:
+            #work on all of the children
+            if new_node is None:
+                new_node = parent
+            assemble(child,new_node)
 
     return canvas
 
-def construct_class(node):
-    #for all of the available tags
-    for tag in tags:
-        #find the tag to create
-        if tag.__tag__ == node.tag:
-            #instance it
-            new_node = tag()
-            #assign the tag
-            new_node.tag = node
-            return new_node
-    #if you reach this point, you've gone to far
-    raise TypeError('Tag not found!')
-        
-        
-    
+

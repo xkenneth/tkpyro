@@ -14,6 +14,20 @@ ignorable = global_keys
 ignorable.extend(grid_keys)
 ignorable.extend(pack_keys)
 
+def construct_class(node):
+    from tags import tag_names
+    #for all of the available tag_names
+    for tag in tag_names:
+        #find the tag to create
+        if tag.__tag__ == node.tag:
+            #instance it
+            new_node = tag()
+            #assign the tag
+            new_node.tag = node
+            return new_node
+    #if you reach this point, you've gone to far
+    raise TypeError('Tag not found!')
+
 def call_scripts(node,parent=None):
     if parent is None:
         parent = node
@@ -70,6 +84,7 @@ def correct_indentation(script):
         proper_script += line[num_tabs:] + '\n'
 
     return proper_script
+
 
 if __name__ == '__main__':
     class correct_indentation_tests(unittest.TestCase):
