@@ -2,8 +2,10 @@
 import re
 import unittest
 import pdb
+import lxml.etree
 
-tab_re = re.compile('\s*')
+space_re = re.compile('\s*')
+tab_re = re.compile('t*')
 constraint_re = re.compile('\${.*}')
 
 global_keys = ['name','id']
@@ -27,6 +29,8 @@ def evaluate_constraints(self,keys):
     return keys
 
 def construct_class(node):
+    if isinstance(node,lxml.etree._Comment):
+        return None
     from tags import tag_names
     #for all of the available tag_names
     for tag in tag_names:
@@ -38,6 +42,7 @@ def construct_class(node):
             new_node.tag = node
             return new_node
     #if you reach this point, you've gone to far
+    pdb.set_trace()
     raise TypeError('Tag not found!')
 
 def call_scripts(node,parent=None):
@@ -102,11 +107,13 @@ def correct_indentation(script):
         
     #find out the number of tabs at the front of the line
     num_tabs = len(tab_re.match(lines[0]).group())
+    num_spaces = len(space_re.match(lines[0]).group())
 
     proper_script = ''
     #for each line, remove the number of tabs
     for line in lines:
-        proper_script += line[num_tabs:] + '\n'
+        proper_script += line[num_tabs+num_spaces:] + '\n'
+
         
     return proper_script
 

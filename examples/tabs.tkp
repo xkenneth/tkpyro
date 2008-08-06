@@ -1,0 +1,13 @@
+<canvas>
+  <notebook>
+    <page title="A Tab!">
+      <text text="Lots o stuff!"/>
+    </page>
+    <page title="Another!">
+      <text text="alsdfjnl;adsflkadsjf;lasdflasjfl;asdl;fasfa"/>
+    </page>
+    <page title="Yet another!">
+      <text text="sadfnasdfnasdnfakjsdfljfgsfk;sas'fasdffdsfgasfsf"/>
+    </page>
+  </notebook>
+</canvas>

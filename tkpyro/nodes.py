@@ -24,6 +24,8 @@ def assemble(tree,parent=None,data=None):
     else:
         #else construct the class
         new_node = construct_class(tree)
+        if not new_node:
+            return
         
         #we don't want to construct the child nodes of a replicate tag in the normal manner, so we don't traverse them
         if new_node.tag.tag == 'replicate':

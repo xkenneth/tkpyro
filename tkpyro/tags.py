@@ -22,7 +22,13 @@ class _visible_obj(_obj):
 class Script(_obj):
     __tag__ = 'script'
     def __call__(self,event=None):
-        exec correct_indentation(self.tag.text)
+        try:
+            exec correct_indentation(self.tag.text)
+        except Exception, e:
+            print e
+            print correct_indentation(self.tag.text)
+            pdb.set_trace()
+
     def construct(self):
         exec correct_indentation(self.tag.text)
 
@@ -82,7 +88,7 @@ class Replicate(_obj):
         for data in eval(self.tag.get('over')):
             for child_node in self.tag:
                 new_node = assemble(child_node,self.parent,data=data)
-                
+
 tag_names = [Canvas,Text,Button,Frame,Script,Event,NoteBook,Page,Replicate,Entry]
 
 

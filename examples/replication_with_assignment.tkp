@@ -1,0 +1,6 @@
+<canvas>
+  <replicate over="['Year','Month','Day','Hour','Minute','Second']">
+    <text text="${self.data}"/>
+    <text name="${self.data}"/>
+  </replicate>
+</canvas>

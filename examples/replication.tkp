@@ -1,0 +1,12 @@
+<canvas import="pdb">
+  <replicate over="[1,2,3]">
+    <text text="Test"/>
+    <replicate over="[1,2,3,4]">
+      <text text="Test2"/>
+    </replicate>
+  </replicate>
+  <script>
+    pass
+  </script>
+</canvas>
+  

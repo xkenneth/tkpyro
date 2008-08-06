@@ -1,0 +1,17 @@
+<canvas>
+  <notebook name="notebook1">	
+    <page name="page1" id="awesome" title="A Tab!">	
+      <text text="Page one!"/>
+    </page>
+    <page title="Another!">
+      <text text="Page Two!"/>
+    </page>
+    <page title="Yet another!">
+      <text text="Page Three!"/>
+    </page>
+  </notebook>
+  <script>
+    import pdb
+    pdb.set_trace()
+  </script>
+</canvas>
