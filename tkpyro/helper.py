@@ -4,6 +4,7 @@ import unittest
 import pdb
 
 tab_re = re.compile('\s*')
+constraint_re = re.compile('\${.*}')
 
 global_keys = ['name','id']
 grid_keys = ['row','column','columnspan','rowspan']
@@ -13,6 +14,17 @@ ignorable = global_keys
 
 ignorable.extend(grid_keys)
 ignorable.extend(pack_keys)
+
+def evaluate_constraints(self,keys):
+
+    try:
+        for k in keys:
+            if constraint_re.match(keys[k]):
+                keys[k] = eval(constraint_re.match(keys[k]).group()[2:-1])
+    except TypeError:
+        if constraint_re.match(keys):
+            keys = eval(constraint_re.match(keys).group()[2:-1])
+    return keys
 
 def construct_class(node):
     from tags import tag_names
@@ -36,6 +48,15 @@ def call_scripts(node,parent=None):
             node()
     for sub_node in node.child_nodes:
         call_scripts(sub_node,parent)
+
+def call_late(node,parent=None):
+    if parent is None:
+        parent = node
+    else:
+        if hasattr(node,'late'):
+            node.late()
+    for sub_node in node.child_nodes:
+        call_late(sub_node,parent)
 
 def not_koi(tag,keys):
     assembled = {}
@@ -62,6 +83,10 @@ def koi(tag,keys):
             val = int(val)
         except TypeError:
             pass
+        except ValueError:
+            pass
+
+
         assembled[k] = val
 
     return assembled
@@ -77,12 +102,12 @@ def correct_indentation(script):
         
     #find out the number of tabs at the front of the line
     num_tabs = len(tab_re.match(lines[0]).group())
-    
+
     proper_script = ''
     #for each line, remove the number of tabs
     for line in lines:
         proper_script += line[num_tabs:] + '\n'
-
+        
     return proper_script
 
 

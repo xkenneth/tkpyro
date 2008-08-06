@@ -1,15 +1,14 @@
 import sys
 import pdb
 
-from helper import construct_class
+from helper import construct_class, evaluate_constraints
 
 #assemble objects recursively
 canvas = None
-def assemble(tree,parent=None):
+def assemble(tree,parent=None,data=None):
     global canvas
     
     new_node = None
-    print tree.tag
 
     #if we need to stop traversing for any reason, mostly for replicate nodes
     stop = False
@@ -32,6 +31,10 @@ def assemble(tree,parent=None):
 
         #set it's parent
         new_node.parent = parent
+
+        #attach the data if it's been replicated
+        if data:
+            new_node.data = data
         #construct it
         if hasattr(new_node,'construct'):
             new_node.construct()
@@ -45,7 +48,10 @@ def assemble(tree,parent=None):
 
         #if it has a name, create it as an attribute on the parent
         name = new_node.tag.get('name')
+        
         if name:
+            name = evaluate_constraints(new_node,name)
+            
             if hasattr(parent,name):
                 raise ValueError('Name already taken!')
             parent.__dict__[name] = new_node
