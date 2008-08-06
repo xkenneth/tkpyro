@@ -1,0 +1,11 @@
+<canvas title="Test!"> 
+  <frame>
+    <button text="Test!">
+      <event id="some_event" on="Button-1">
+	print "Clickable!"
+      </event>
+    </button>   
+  </frame>
+</canvas>
+  
+

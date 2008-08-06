@@ -1,0 +1,7 @@
+<canvas>
+  <script>
+    print "I am a script!"
+    print "Good day to you!"
+    print "....Stop Staring at Me...."
+  </script>
+</canvas>
